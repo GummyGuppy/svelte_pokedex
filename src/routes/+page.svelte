@@ -14,11 +14,13 @@
 		fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
 			.then(response => response.json())
 			.then(allpokemon =>  {
-			allpokemon.results.map((poke) => pokemon = [...pokemon, poke.name])})
-	
-		
-			
+			allpokemon.results.map((poke) => pokemon = [...pokemon, poke.name])})			
 	}	
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
 	//call function
 	getPokemon()
 
@@ -37,8 +39,9 @@
 	
 </script>
 
-<div class="flex flex-col w-screen gap-6 items-center">
+<div class="flex flex-col w-screen h-screen justify-center gap-6 items-center">
 
+    <h1 class="text-xl">{pokemon[currentPokemon - 1]}</h1>
     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{currentPokemon}.png"/>
     <p>
         current pokemon is {pokemon[currentPokemon - 1]}
@@ -53,4 +56,10 @@
 
 </div>
 
+<style>
+    h1::first-letter {
+        text-transform:capitalize;
+    }
+    
+</style>
 
