@@ -5,12 +5,12 @@
     import Button from '../components/Button.svelte'
     import Card from '../components/Card.svelte'
 
-	
-	$: currentPokemon = 1// 0
-	$: pokemon = []
-	
-	let value = ''
+
+	$: currentPokemon = 0
+    let pokemon = []
 		
+    
+
 	//fetch pokemon from PokeAPI
 	function getPokemon(){
     
@@ -19,27 +19,29 @@
 		fetch("https://pokeapi.co/api/v2/pokemon?limit=151") //
 			.then(response => response.json()) //
 			.then(allpokemon =>  {
-			allpokemon.results.map((poke) => 
+                pokemon = allpokemon.results.map((poke, index) => 
             
-                pokemon = [...pokemon, {
-                    index: index++,
-                    name: poke.name
-                }]
-                )})
-                .then(() => console.log(pokemon))
-                
+                {
+                    return {
+                        index,
+                        name: poke.name
+                    }
+                }
+            )})
+
+            .then(() => console.log(pokemon))
 	}	
+
+	//populate pokemon array on page load
+	getPokemon()
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-	//populate pokemon array on page load
-	getPokemon()
-
 	//back functionality
 	function back(){
-		if(currentPokemon > 1){
+		if(currentPokemon > 0){
 			currentPokemon--
 		}
 	}
@@ -54,16 +56,11 @@
 
 <div class="flex flex-col w-screen h-screen justify-center gap-6 items-center">
 
-    
-    <h1 class="text-xl">
-        {pokemon[0]}
-    </h1>
+    {pokemon[currentPokemon]?.name}
 
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{currentPokemon}.png"
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{currentPokemon + 1}.png"
         class="w-48 h-48"/>
-    <p>
-       
-    </p>
+
 
     <div class="flex gap-4">
         <Button fn={back} title="Back"/>
