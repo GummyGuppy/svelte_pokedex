@@ -52,14 +52,16 @@
 			currentPokemon++
 	}
 	
+
+//     {pokemon[currentPokemon]?.name}
+
+// <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{currentPokemon + 1}.png"
+//     class="w-48 h-48"/>
 </script>
 
 <div class="flex flex-col w-screen h-screen justify-center gap-6 items-center">
 
-    {pokemon[currentPokemon]?.name}
-
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{currentPokemon + 1}.png"
-        class="w-48 h-48"/>
+    <Card/>
 
 
     <div class="flex gap-4">
