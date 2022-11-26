@@ -10,30 +10,28 @@
     let pokemon = []
 		
     
+    //fetch on pageload ??
+	fetch("https://pokeapi.co/api/v2/pokemon")
+        .then(response => response.json())
+        .then(res => res.results.forEach((pokemon) => {
 
-	//fetch pokemon from PokeAPI
-	function getPokemon(){
-    
-        let index = 0
-
-		fetch("https://pokeapi.co/api/v2/pokemon?limit=151") //
-			.then(response => response.json()) //
-			.then(allpokemon =>  {
-                pokemon = allpokemon.results.map((poke, index) => 
+            pokemon = [...pokemon, {
+                name: pokemon.name,
+                sprite: fetchPokemonData(pokemon)
+            }]
             
-                {
-                    return {
-                        index,
-                        name: poke.name
-                    }
-                }
-            )})
+        }))
+            
 
-            .then(() => console.log(pokemon))
-	}	
+    function fetchPokemonData(pokemon){
+        let url = pokemon.url
 
-	//populate pokemon array on page load
-	getPokemon()
+        fetch(url)
+        .then(res => res.json())
+        .then(details => {
+            console.log(details.sprites.front_shiny)
+        })
+    }
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -61,7 +59,7 @@
 
 <div class="flex flex-col w-screen h-screen justify-center gap-6 items-center">
 
-    <Card/>
+    <Card name={pokemon[currentPokemon]?.name}/>
 
 
     <div class="flex gap-4">
