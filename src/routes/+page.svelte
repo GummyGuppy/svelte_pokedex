@@ -6,30 +6,38 @@
     import Card from '../components/Card.svelte'
 
 
-	$: currentPokemon = 0
-    let pokemon = []
+	let currentPokemon = 0
+    $: allPokemon = []
+    let sprites = []
 		
     
     //fetch on pageload ??
-	fetch("https://pokeapi.co/api/v2/pokemon")
+	fetch("https://pokeapi.co/api/v2/pokemon?limit=151")
         .then(response => response.json())
-        .then(res => res.results.forEach((pokemon) => {
-
-            pokemon = [...pokemon, {
-                name: pokemon.name,
-                sprite: fetchPokemonData(pokemon)
-            }]
-            
-        }))
+        .then(res => res.results.forEach(poke => {
+  
+           fetchPokemonData(poke)
+  
+    }))
+    
             
 
     function fetchPokemonData(pokemon){
+
         let url = pokemon.url
 
         fetch(url)
         .then(res => res.json())
         .then(details => {
-            console.log(details.sprites.front_shiny)
+
+             console.log("Name is: " + details.name)
+            console.log("sprites are " + JSON.stringify(details.sprites))
+
+           allPokemon = [...allPokemon, details.name]
+           sprites = [...sprites, details.sprites.front_default]
+           
+           
+
         })
     }
 
@@ -46,21 +54,22 @@
 
 	//next functionality
 	function next(){
-		if(currentPokemon < pokemon.length - 1)
+		if(currentPokemon < allPokemon.length - 1)
 			currentPokemon++
 	}
 	
-
-//     {pokemon[currentPokemon]?.name}
-
-// <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{currentPokemon + 1}.png"
-//     class="w-48 h-48"/>
 </script>
 
 <div class="flex flex-col w-screen h-screen justify-center gap-6 items-center">
 
-    <Card name={pokemon[currentPokemon]?.name}/>
-
+    {#if !allPokemon[currentPokemon]}
+        <h1>loading...</h1> 
+        {:else}
+        <h1 class="text-2xl">{allPokemon[currentPokemon]}</h1>
+        <img src={sprites[currentPokemon]} class="w-48 h-48">
+    {/if}
+    
+    
 
     <div class="flex gap-4">
         <Button fn={back} title="Back"/>
